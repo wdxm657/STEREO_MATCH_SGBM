@@ -47,29 +47,12 @@ int main(int argv, char **argc)
     cv::Mat img_left = cv::imread(path_left, cv::IMREAD_GRAYSCALE);
     cv::Mat img_right = cv::imread(path_right, cv::IMREAD_GRAYSCALE);
 
-    // save image
-    cv::String pl = "awesome-sgbm/Data/FPGA_proc/pic/grey_left.png";
-    cv::String pr = "awesome-sgbm/Data/FPGA_proc/pic/grey_right.png";
-    pl = cwd_ + pl;
-    pr = cwd_ + pr;
-
-    cv::imwrite(pl, img_left);
-    cv::imwrite(pr, img_right);
-
     cv::namedWindow("img_left_c", 1);
     cv::imshow("img_left_c", img_left_c);
-
-    cv::waitKey(30);
-
     cv::namedWindow("img_left", 1);
     cv::imshow("img_left", img_left);
-
-    cv::waitKey(30);
-
     cv::namedWindow("img_right", 1);
     cv::imshow("img_right", img_right);
-
-    cv::waitKey(30);
 
     if (img_left.data == nullptr || img_right.data == nullptr)
     {
@@ -385,19 +368,19 @@ int main(int argv, char **argc)
     // }
     // std::fclose(FilePosition_my_disp);
 
-    cv::namedWindow("视差图", 1);
-    cv::namedWindow("视差图TEMP!", 1);
-    cv::namedWindow("视差图-伪彩", 1);
-    cv::namedWindow("视差图-伪彩TEMP!", 1);
-    cv::imshow("视差图", disp_mat);
-    cv::imshow("视差图TEMP!", disp_temp_mat);
+    cv::namedWindow("disparity", 1);
+    cv::namedWindow("disparity-TEMP!", 1);
+    cv::namedWindow("disparity-pseudo-color", 1);
+    cv::namedWindow("disparity-pseudo-color-TEMP!", 1);
+    cv::imshow("disparity", disp_mat);
+    cv::imshow("disparity-TEMP!", disp_temp_mat);
 
     cv::Mat disp_color;
     applyColorMap(disp_mat, disp_color, cv::COLORMAP_JET);
-    cv::imshow("视差图-伪彩", disp_color);
+    cv::imshow("disparity-pseudo-color", disp_color);
     cv::Mat disp_temp_color;
     applyColorMap(disp_temp_mat, disp_temp_color, cv::COLORMAP_JET);
-    cv::imshow("视差图-伪彩TEMP!", disp_temp_color);
+    cv::imshow("disparity-pseudo-color-TEMP!", disp_temp_color);
 
     // 保存结果bmp
     std::string disp_map_path = argc[2];

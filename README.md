@@ -19,60 +19,123 @@ This directory contains both code of PS part and code of PL part. Under this dir
 You're greatly welcomed to follow my bilibili account, which is https://space.bilibili.com/341561358. Hopefully you can find SGBM video explanation there at https://www.bilibili.com/video/BV1kR4y1S7TJ !
 ## Start
 ### initial project
-```
+```shell
 cd STEREO_MATCH_SGBM/code/Ubuntu_C++/awesome-sgbm
 rm -rf build && mkdir build
 ```
 ### install opencv
-```
+```shell
 git clone git@github.com:opencv/opencv.git
 cd opencv
 git checkout 4.11.0
 mkdir build && cd build
-sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff5.dev libswscale-dev libjasper-dev -y
+sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev \ 
+                     libavformat-dev libjpeg.dev libtiff5.dev libswscale-dev \
+                     libgtk2.0-dev libjasper-dev \
+                     -y
+
 cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local/include/opencv-4.11.0 ..
 make -j8
 sudo make install
-sudo gedit /etc/ld.so.conf
+sudo vi /etc/ld.so.conf
     add
         /usr/local/include/opencv-4.11.0
 sudo ldconfig
-sudo gedit ~/.bashrc
+sudo vi ~/.bashrc
     add
         PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/include/opencv-4.11.0/lib/pkgconfig
         export PKG_CONFIG_PATH
+        export OpenCV_DIR=/usr/local/include/opencv-4.11.0
 source ~/.bashrc
-pkg-config opencv --modversion
+pkg-config opencv4 --modversion
 cd ../samples/cpp/example_cmake
 cmake . && make && ./opencv_example
 ```
+### install usbipd(windows camera connect 2 wsl2)
+- follow this can be successfully https://blog.csdn.net/chengpengfei09121870/article/details/142762468
+download the usbipd-win 2 control usb dev
+- https://github.com/dorssel/usbipd-win/releases/tag/v4.3.0
+```powershell
+# check usb device
+usbipd list
+# bind and connect usb dev 2 wsl2
+usbipd bind -b [BUSID]
+usbipd attach -w -b [BUSID]
+# detach usb dev
+usbipd detach -b [BUSID]
+```
+```shell
+sudo apt install usbutils -y
+lsusb
+# install wsl camera driver
+sudo apt install -y build-essential flex bison dwarves libssl-dev libelf-dev libncurses-dev pkg-config
+uname -r
+cd ~/downloads
+TAGVERNUM=5.15.167.4
+TAGVER=linux-msft-wsl-${TAGVERNUM}
+- download driver
+    - https://codeload.github.com/microsoft
+        - https://codeload.github.com/microsoft/WSL2-Linux-Kernel/tar.gz/refs/tags/linux-msft-wsl-5.15.167.4
+sudo tar -xzvf WSL2-Linux-Kernel-linux-msft-wsl-5.15.167.4.tar.gz
+sudo mv WSL2-Linux-Kernel-linux-msft-wsl-5.15.167.4 /usr/src/${TAGVERNUM}-microsoft-standard
+cd /usr/src/${TAGVERNUM}-microsoft-standard
+
+sudo cp /proc/config.gz config.gz \
+  && sudo gunzip config.gz \
+  && sudo mv config .config
+
+sudo make menuconfig
+
+# Build WSL2 kernel with usb camera support
+# menuconfig -> Device Drivers -> Multimedia support -> Filter media drivers
+#            -> Device Drivers -> Multimedia support -> Media device types -> Cameras and video grabbers
+#            -> Device Drivers -> Multimedia support -> Video4Linux options -> V4L2 sub-device userspace API
+#            -> Device Drivers -> Multimedia support -> Media drivers -> Media USB Adapters -> USB Video Class (UVC)
+#            -> Device Drivers -> Multimedia support -> Media drivers -> Media USB Adapters -> UVC input events device support
+#            -> Device Drivers -> Multimedia support -> Media drivers -> Media USB Adapters -> GSPCA based webcams
+
+sudo make -j$(nproc) KCONFIG_CONFIG=.config \
+  && sudo make modules_install -j$(nproc) \
+  && sudo make install -j$(nproc)
+
+mkdir -p /mnt/c/Users/47338/WSL2/kernel-5.15.167.4
+sudo cp vmlinux /mnt/c/Users/47338/WSL2/kernel-5.15.167.4
+vi /mnt/c/Users/47338/.wslconfig
+
+    [wsl2]
+    kernel=C:\\Users\\<user name>\\WSL2\\kernel-5.15.150.1\\vmlinux
+# reboot wsl
+# test usb camera by opencv example cpp program
+cd opencv/samples/cpp/example_cmake/build
+sudo ./opencv_example
+```
 ### install PCL
 ```
-wget https://github.com/PointCloudLibrary/pcl/releases/tag/pcl-1.10.1
-tar -zxvf pcl-1.10.1.tar.gz
-cd pcl-1.10.1
+cd ~/downloads
+wget https://codeload.github.com/PointCloudLibrary/pcl/tar.gz/refs/tags/pcl-1.14.1
+tar -zxvf pcl-1.14.1
+cd pcl-pcl-1.14.1
 sudo apt-get update
-sudo apt-get install git build-essential linux-libc-dev
-sudo apt-get install cmake cmake-gui 
-sudo apt-get install libusb-1.0-0-dev libusb-dev libudev-dev
-sudo apt-get install mpi-default-dev openmpi-bin openmpi-common
-sudo apt-get install libpcap-dev
-sudo apt-get install libflann1.9 libflann-dev
-sudo apt-get install libeigen3-dev
-sudo apt-get install libboost-all-dev
-sudo apt-get install vtk6 libvtk6.3 libvtk6-dev libvtk6.3-qt libvtk6-qt-dev 
-sudo apt-get install libqhull* libgtest-dev
-sudo apt-get install freeglut3-dev pkg-config
-sudo apt-get install libxmu-dev libxi-dev 
-sudo apt-get install mono-complete
-sudo apt-get install libopenni-dev libopenni2-dev
-mkdir build %% cd build
+sudo apt-get install git build-essential linux-libc-dev \
+                     cmake \
+                     libusb-1.0-0-dev libusb-dev libudev-dev \
+                     mpi-default-dev openmpi-bin openmpi-common \
+                     libpcap-dev \
+                     libflann1.9 libflann-dev libeigen3-dev \
+                     libboost-all-dev \
+                     vtk9 libvtk9-dev libvtk9-qt-dev \
+                     libqhull* libgtest-dev \
+                     freeglut3-dev pkg-config \
+                     libxmu-dev libxi-dev \
+                     mono-complete \
+                     libopenni-dev libopenni2-dev
+mkdir build && cd build
 cmake -DCMAKE_BUILD_TYPE=None \
       -DCMAKE_INSTALL_PREFIX=/usr/local \
       -DBUILD_GPU=ON \
       -DBUILD_apps=ON \
       -DBUILD_examples=ON ..
-make -j8
+make -j$(nproc)
 sudo make install
 pcl_viewer ../test/pcl_logo.pcd
 ```
@@ -81,7 +144,7 @@ pcl_viewer ../test/pcl_logo.pcd
 cd STEREO_MATCH_SGBM/code/Ubuntu_C++/awesome-sgbm
 mkdir build && cd build
 cmake .. && make -j
-../bin/semi_global_matching ../Data/cone/left.png ../Data/cone/right.png 64 128
+../bin/semi_global_matching ../Data/cone/left.png ../Data/cone/right.png 0 128 5
 ```
 ## TODO
 A new video will be made in a couple of days illustrating the usage of this repository in detail!
