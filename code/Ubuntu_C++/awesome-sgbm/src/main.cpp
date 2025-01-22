@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <vector>
+#include "main.h"
 
 std::vector<std::string> splitString(const std::string &str, const std::string &delimiter)
 {
@@ -67,8 +68,9 @@ int main(int argv, char **argc)
 
     const sint32 width = static_cast<uint32>(img_left.cols);
     const sint32 height = static_cast<uint32>(img_right.rows);
-    std::cout << "width of input picture == " << width << std::endl;
-    std::cout << "height of input picture == " << height << std::endl;
+    fmt::print(__red_log, "width, height of input picture == {}, {}\n", width, height);
+    fmt::print(green_log, "width, height of input picture == {}, {}\n", width, height);
+    fmt::print(white_log, "width, height of input picture == {}, {}\n", width, height);
 
     // the graydata of the left and right image
     auto bytes_left = new uint8[width * height];
