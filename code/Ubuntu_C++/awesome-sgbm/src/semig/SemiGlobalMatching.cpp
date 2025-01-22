@@ -46,7 +46,7 @@ bool SemiGlobalMatching::Initialize(const sint32& width, const sint32& height, c
 
     // census值（左右影像）
     const sint32 img_size = width * height;
-    if (option.census_size == Census5x5) {
+    if (option.census_size <= Census5x5) {
         census_left_ = new uint32[img_size]();
         census_right_ = new uint32[img_size]();
     }
@@ -209,11 +209,6 @@ bool SemiGlobalMatching::Match(const uint8* img_left, const uint8* img_right, fl
 
     // census变换
     CensusTransform();
-    // Cencus 3x3 dont apply to subsequent operations 
-    // wait for modify
-    if (option_.census_size == Census3x3)
-        option_.census_size = Census5x5;
-    
 
     // 代价计算
     ComputeCost();

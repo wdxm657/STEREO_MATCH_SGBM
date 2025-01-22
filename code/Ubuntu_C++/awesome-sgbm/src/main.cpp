@@ -1,13 +1,13 @@
 /* -*-c++-*- SemiGlobalMatching - Copyright (C) 2022.
  * Author	: EscapeTHU
  */
-#include <SemiGlobalMatching.h>
 #include <opencv2/opencv.hpp>
 #include <fstream>
 #include <stdio.h>
 #include <unistd.h>
 #include <vector>
 #include "main.h"
+#include "semig/SemiGlobalMatching.h"
 
 std::vector<std::string> splitString(const std::string &str, const std::string &delimiter)
 {
@@ -116,7 +116,7 @@ int main(int argv, char **argc)
     // TODO: reload print sgm_option
     fmt::print(white_log, "min_disparity == {}\n", sgm_option.min_disparity);
     fmt::print(white_log, "max_disparity == {}\n", sgm_option.min_disparity);
-    // fmt::print(white_log, "census_size == {}\n", sgm_option.census_size);
+    fmt::print(white_log, "census_size == {}\n", argc[5]);
     fmt::print(white_log, "一致性检查 == {} {}\n", sgm_option.is_check_lr, sgm_option.lrcheck_thres);
     fmt::print(white_log, "唯一性约束 == {} {}\n", sgm_option.is_check_unique, sgm_option.uniqueness_ratio);
     fmt::print(white_log, "剔除小连通区 == {} {}\n", sgm_option.is_remove_speckles, sgm_option.min_speckle_aera);
@@ -369,7 +369,7 @@ int main(int argv, char **argc)
     // std::cout << "Start Writing My Disparity..." << std::endl;
     // for (sint32 i = 0; i < height * width; i++)
     // {
-    //     std::fprintf(FilePosition_my_disp, "%08X\n", my_disparity[i]);  
+    //     std::fprintf(FilePosition_my_disp, "%08X\n", my_disparity[i]);
     // }
     // std::fclose(FilePosition_my_disp);
 
