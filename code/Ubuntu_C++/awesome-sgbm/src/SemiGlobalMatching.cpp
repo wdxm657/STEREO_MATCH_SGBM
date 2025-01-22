@@ -219,7 +219,7 @@ bool SemiGlobalMatching::Match(const uint8* img_left, const uint8* img_right, fl
     ComputeCost();
 
     // 代价聚合
-    // CostAggregation();
+    CostAggregation();
 
     // 视差计算
     ComputeDisparity();
