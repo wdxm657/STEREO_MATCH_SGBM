@@ -27,21 +27,21 @@ rm -rf build && mkdir build
 ```
 git clone git@github.com:opencv/opencv.git
 cd opencv
-git checkout 3.2.0
+git checkout 4.11.0
 mkdir build && cd build
 sudo apt-get install build-essential libgtk2.0-dev libavcodec-dev libavformat-dev libjpeg.dev libtiff5.dev libswscale-dev libjasper-dev -y
-cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local/include/opencv-3.2.0 ..
+cmake -D CMAKE_BUILD_TYPE=Release -D CMAKE_INSTALL_PREFIX=/usr/local/include/opencv-4.11.0 ..
 make -j8
 sudo make install
 sudo gedit /etc/ld.so.conf
     add
-        /usr/local/include/opencv-3.2.0
+        /usr/local/include/opencv-4.11.0
 sudo ldconfig
-sudo gedit /etc/bash.bashrc
+sudo gedit ~/.bashrc
     add
-        PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/include/opencv-3.2.0/lib/pkgconfig
+        PKG_CONFIG_PATH=$PKG_CONFIG_PATH:/usr/local/include/opencv-4.11.0/lib/pkgconfig
         export PKG_CONFIG_PATH
-source /etc/bash.bashrc
+source ~/.bashrc
 pkg-config opencv --modversion
 cd ../samples/cpp/example_cmake
 cmake . && make && ./opencv_example
