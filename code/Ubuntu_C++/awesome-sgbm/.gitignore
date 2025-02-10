@@ -1,5 +1,6 @@
 # ignore dot files/directories
 build
 opencv
+opencv_contrib
 bin
 lib

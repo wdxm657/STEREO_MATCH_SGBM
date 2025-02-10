@@ -60,4 +60,5 @@ target_link_libraries(semi_global_matching ${OpenCV_LIBS} ${PCL_LIBRARIES} semig
 # 读入verilog仿真生成基于Hamming-Distance的原始代价的txt文件，生成视差图，方便verilog hamming_distance的仿真验证
 # add_executable(cost_init_in src/simulation/cost_init_in.cpp)
 
+add_subdirectory(Stereo-Vision)
 message("PROJECT_LIB_DIR : ${PROJECT_LIB_DIR}")

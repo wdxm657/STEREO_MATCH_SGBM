@@ -1,0 +1,3 @@
+[submodule "code/Ubuntu_C++/awesome-sgbm/Stereo-Vision"]
+	path = code/Ubuntu_C++/awesome-sgbm/Stereo-Vision
+	url = https://github.com/wdxm657/Stereo-Vision.git

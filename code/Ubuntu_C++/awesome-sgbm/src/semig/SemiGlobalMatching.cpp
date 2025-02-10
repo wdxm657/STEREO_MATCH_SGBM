@@ -357,10 +357,12 @@ void SemiGlobalMatching::ComputeCost() const
         	for (sint32 d = min_disparity; d < max_disparity; d++) {
                 auto& cost = cost_init_[i * width_ * disp_range + j * disp_range + (d - min_disparity)];
                 if (j - d < 0 || j - d >= width_) {
+                    // print i == 0的时候 j 和 d的情况
+                    // j < width_ > 0  d > 0 ==> j - d < width_
                     cost = UINT8_MAX;
                     continue;
                 }
-                if (option_.census_size == Census3x3 || option_.census_size == Census5x5) {
+                if (option_.census_size <= Census5x5) {
                     // 左影像census值
                     const auto& census_val_l = static_cast<uint32*>(census_left_)[i * width_ + j];
                     // 右影像对应像点的census值

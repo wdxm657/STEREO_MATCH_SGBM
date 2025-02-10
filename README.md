@@ -50,6 +50,16 @@ source ~/.bashrc
 pkg-config opencv4 --modversion
 cd ../samples/cpp/example_cmake
 cmake . && make && ./opencv_example
+### install opencv_contrib
+cd STEREO_MATCH_SGBM/code/Ubuntu_C++/awesome-sgbm
+git clone https://github.com/opencv/opencv_contrib.git
+cd opencv/build
+cmake -D CMAKE_BUILD_TYPE=Release \
+      -D CMAKE_INSTALL_PREFIX=/usr/local/include/opencv-4.11.0 \
+      -D OPENCV_EXTRA_MODULES_PATH=../../opencv_contrib/modules \
+      ..
+make -j
+```
 ```
 ### install usbipd(windows camera connect 2 wsl2)
 - follow this can be successfully https://blog.csdn.net/chengpengfei09121870/article/details/142762468
